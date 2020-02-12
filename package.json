@@ -1,0 +1,45 @@
+{
+  "name": "single-spa-dojo",
+  "version": "1.0.0",
+  "description": "single-spa adapter for dojo framework",
+  "main": "lib/single-spa-dojo.js",
+  "scripts": {
+    "build": "babel src --out-dir lib --source-maps",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "prepublishOnly": "yarn build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged && yarn test"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/single-spa/single-spa-dojo.git"
+  },
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "single-spa",
+    "microfrontends",
+    "dojo"
+  ],
+  "author": "Joel Denning",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/single-spa/single-spa-dojo/issues"
+  },
+  "homepage": "https://github.com/single-spa/single-spa-dojo#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@types/jest": "^25.1.2",
+    "husky": "^4.2.2",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1"
+  }
+}
