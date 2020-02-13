@@ -1,5 +1,10 @@
 // opts are what is passed to singleSpaDojo({...})
-const defaultOpts = {};
+const defaultOpts = {
+  renderer: null,
+	mountOptions: {
+		registry: null
+	}
+};
 
 export default function singleSpaDojo(userOpts) {
   if (typeof userOpts !== "object") {
@@ -27,16 +32,14 @@ function bootstrap(opts, props) {
 function mount(opts, props) {
   return Promise.resolve().then(() => {
     const domElementGetter = chooseDomElementGetter(opts, props);
-    const domElement = domElementGetter();
-
-    // here is where we should do something like new Registry(), renderer().mount({register})
-    // We should mount dojo  into the domElement
-  });
+    const domElement = getRootDomEl(domElementGetter, props);
+	opts.mountOpts.domNode = domElement
+	opts.renderer.mount(opts.mountOptions)
 }
 
 function unmount(opts, props) {
   return Promise.resolve().then(() => {
-    // here is where we tell dojo to unmount
+     renderer(() => <div style="display: none" />).mount({ domNode });
   });
 }
 
