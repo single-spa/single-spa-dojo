@@ -4,4 +4,4 @@
 
 single-spa adapter for dojo
 
-(Still under development)
+[Full documentation](https://single-spa.js.org/docs/next/ecosystem-dojo)
