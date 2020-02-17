@@ -2,7 +2,16 @@ import singleSpaDojo from "./single-spa-dojo";
 
 describe("single-spa-dojo", () => {
   it("can bootstrap, mount, and unmount", () => {
-    const lifecycles = singleSpaDojo({});
+    const lifecycles = singleSpaDojo({
+      renderer() {
+        return {
+          mount() {}
+        };
+      },
+      v() {},
+      w() {},
+      appComponent() {}
+    });
 
     const props = { name: "test" };
 
