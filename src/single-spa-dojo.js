@@ -1,9 +1,35 @@
 // opts are what is passed to singleSpaDojo({...})
-const defaultOpts = {};
+const defaultOpts = {
+  renderer: null,
+  v: null,
+  w: null,
+  appComponent: null,
+  mountOptions: {}
+};
 
 export default function singleSpaDojo(userOpts) {
   if (typeof userOpts !== "object") {
-    throw new Error(`single-spa-dojo requires a configuration object`);
+    throw Error(`single-spa-dojo requires a configuration object`);
+  }
+
+  if (typeof userOpts.renderer !== "function") {
+    throw Error(
+      `single-spa-dojo requires a function renderer opt to be provided.`
+    );
+  }
+
+  if (typeof userOpts.v !== "function") {
+    throw Error(`single-spa-dojo requires a 'v' function to be provided`);
+  }
+
+  if (typeof userOpts.w !== "function") {
+    throw Error(`single-spa-dojo requires a 'w' function to be provided`);
+  }
+
+  if (typeof userOpts.appComponent !== "function") {
+    throw Error(
+      `single-spa-dojo requires an appComponent opt to be provided. This should be a class/function`
+    );
   }
 
   const opts = {
@@ -12,42 +38,47 @@ export default function singleSpaDojo(userOpts) {
   };
 
   const lifecycles = {
-    bootstrap: bootstrap.bind(null, opts),
-    mount: mount.bind(null, opts),
-    unmount: unmount.bind(null, opts)
+    bootstrap,
+    mount,
+    unmount
   };
 
   return lifecycles;
-}
 
-function bootstrap(opts, props) {
-  return Promise.resolve();
-}
+  function bootstrap(props) {
+    return Promise.resolve();
+  }
 
-function mount(opts, props) {
-  return Promise.resolve().then(() => {
-    const domElementGetter = chooseDomElementGetter(opts, props);
-    const domElement = domElementGetter();
+  function mount(props) {
+    return Promise.resolve().then(() => {
+      if (!opts.mountOptions.domNode) {
+        const domElementGetter = chooseDomElementGetter(opts, props);
+        const domElement = domElementGetter();
+        opts.mountOptions.domNode = domElement;
+      }
 
-    // here is where we should do something like new Registry(), renderer().mount({register})
-    // We should mount dojo  into the domElement
-  });
-}
+      const renderResult = opts.renderer(() =>
+        opts.w(opts.appComponent, props)
+      );
+      renderResult.mount(opts.mountOptions);
+    });
+  }
 
-function unmount(opts, props) {
-  return Promise.resolve().then(() => {
-    // here is where we tell dojo to unmount
-  });
+  function unmount(props) {
+    return Promise.resolve().then(() => {
+      // TODO - find a way to unmount the previously rendered
+      const renderResult = opts.renderer(() =>
+        opts.v("div", { style: "display: none;" })
+      );
+      renderResult.mount(opts.mountOptions);
+    });
+  }
 }
 
 function chooseDomElementGetter(opts, props) {
   props = props && props.customProps ? props.customProps : props;
   if (props.domElement) {
     return () => props.domElement;
-  } else if (props.domElementGetter) {
-    return props.domElementGetter;
-  } else if (opts.domElementGetter) {
-    return opts.domElementGetter;
   } else {
     return defaultDomElementGetter(props);
   }
