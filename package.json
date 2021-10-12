@@ -1,6 +1,6 @@
 {
   "name": "single-spa-dojo",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "single-spa adapter for dojo framework",
   "main": "dist/single-spa-dojo.js",
   "type": "module",
