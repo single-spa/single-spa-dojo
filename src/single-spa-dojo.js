@@ -4,7 +4,7 @@ const defaultOpts = {
   v: null,
   w: null,
   appComponent: null,
-  mountOptions: {}
+  mountOptions: {},
 };
 
 export default function singleSpaDojo(userOpts) {
@@ -34,13 +34,13 @@ export default function singleSpaDojo(userOpts) {
 
   const opts = {
     ...defaultOpts,
-    ...userOpts
+    ...userOpts,
   };
 
   const lifecycles = {
     bootstrap,
     mount,
-    unmount
+    unmount,
   };
 
   return lifecycles;

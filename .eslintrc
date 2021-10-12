@@ -1,0 +1,6 @@
+{
+  "extends": [
+    "important-stuff"
+  ],
+  "parser": "@babel/eslint-parser"
+}

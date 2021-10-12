@@ -5,12 +5,12 @@ describe("single-spa-dojo", () => {
     const lifecycles = singleSpaDojo({
       renderer() {
         return {
-          mount() {}
+          mount() {},
         };
       },
       v() {},
       w() {},
-      appComponent() {}
+      appComponent() {},
     });
 
     const props = { name: "test" };
