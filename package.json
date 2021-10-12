@@ -6,13 +6,12 @@
   "scripts": {
     "build": "babel src --out-dir lib --source-maps",
     "test": "jest",
+    "format": "prettier --write .",
+    "check-format": "prettier --check .",
     "coverage": "jest --coverage",
-    "prepublishOnly": "yarn build"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged && yarn test"
-    }
+    "lint": "eslint src",
+    "prepublishOnly": "pnpm run build",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -35,11 +34,14 @@
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
+    "@babel/eslint-parser": "^7.15.8",
     "@babel/preset-env": "^7.8.4",
-    "@types/jest": "^25.1.2",
-    "husky": "^4.2.2",
-    "jest": "^25.1.0",
-    "prettier": "^1.19.1",
-    "pretty-quick": "^2.0.1"
+    "@types/jest": "^27.0.2",
+    "eslint": "^8.0.0",
+    "eslint-config-important-stuff": "^1.1.0",
+    "husky": "^7.0.0",
+    "jest": "^27.2.5",
+    "prettier": "^2.4.1",
+    "pretty-quick": "^3.1.1"
   }
 }
