@@ -1,11 +1,16 @@
 import singleSpaDojo from "./single-spa-dojo";
+import { jest } from "@jest/globals";
 
 describe("single-spa-dojo", () => {
-  it("can bootstrap, mount, and unmount", () => {
+  it("can bootstrap, mount, and unmount", async () => {
+    const mount = jest.fn();
+    const unmount = jest.fn();
+
     const lifecycles = singleSpaDojo({
       renderer() {
         return {
-          mount() {},
+          mount,
+          unmount,
         };
       },
       v() {},
@@ -15,9 +20,14 @@ describe("single-spa-dojo", () => {
 
     const props = { name: "test" };
 
-    return lifecycles
-      .bootstrap(props)
-      .then(() => lifecycles.mount(props))
-      .then(() => lifecycles.unmount(props));
+    await lifecycles.bootstrap(props);
+
+    expect(mount).not.toHaveBeenCalled();
+    await lifecycles.mount(props);
+    expect(mount).toHaveBeenCalled();
+
+    expect(unmount).not.toHaveBeenCalled();
+    await lifecycles.unmount(props);
+    expect(unmount).toHaveBeenCalled();
   });
 });
