@@ -2,10 +2,11 @@
   "name": "single-spa-dojo",
   "version": "1.0.0",
   "description": "single-spa adapter for dojo framework",
-  "main": "lib/single-spa-dojo.js",
+  "main": "dist/single-spa-dojo.js",
+  "type": "module",
   "scripts": {
-    "build": "babel src --out-dir lib --source-maps",
-    "test": "jest",
+    "build": "rimraf dist && rollup -c",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules BABEL_ENV=test jest",
     "format": "prettier --write .",
     "check-format": "prettier --check .",
     "coverage": "jest --coverage",
@@ -18,7 +19,10 @@
     "url": "git+https://github.com/single-spa/single-spa-dojo.git"
   },
   "files": [
-    "lib"
+    "dist"
+  ],
+  "browserslist": [
+    "extends browserslist-config-single-spa"
   ],
   "keywords": [
     "single-spa",
@@ -32,16 +36,23 @@
   },
   "homepage": "https://github.com/single-spa/single-spa-dojo#readme",
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
     "@babel/eslint-parser": "^7.15.8",
     "@babel/preset-env": "^7.8.4",
+    "@jest/globals": "^27.2.5",
+    "@rollup/plugin-node-resolve": "^13.0.5",
     "@types/jest": "^27.0.2",
+    "browserslist-config-single-spa": "^1.0.1",
+    "cross-env": "^7.0.3",
+    "dom-element-getter-helpers": "^1.1.1",
     "eslint": "^8.0.0",
     "eslint-config-important-stuff": "^1.1.0",
     "husky": "^7.0.0",
     "jest": "^27.2.5",
     "prettier": "^2.4.1",
-    "pretty-quick": "^3.1.1"
+    "pretty-quick": "^3.1.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.58.0",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }

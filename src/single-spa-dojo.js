@@ -1,3 +1,5 @@
+import { chooseDomElementGetter } from "dom-element-getter-helpers";
+
 // opts are what is passed to singleSpaDojo({...})
 const defaultOpts = {
   renderer: null,
@@ -43,6 +45,8 @@ export default function singleSpaDojo(userOpts) {
     unmount,
   };
 
+  const renderResults = {};
+
   return lifecycles;
 
   function bootstrap(props) {
@@ -61,46 +65,15 @@ export default function singleSpaDojo(userOpts) {
         opts.w(opts.appComponent, props)
       );
       renderResult.mount(opts.mountOptions);
+      renderResults[props.name] = renderResult;
     });
   }
 
   function unmount(props) {
     return Promise.resolve().then(() => {
-      // TODO - find a way to unmount the previously rendered
-      const renderResult = opts.renderer(() =>
-        opts.v("div", { style: "display: none;" })
-      );
-      renderResult.mount(opts.mountOptions);
+      const renderResult = renderResults[props.name];
+      renderResult.unmount();
+      delete renderResults[props.name];
     });
   }
-}
-
-function chooseDomElementGetter(opts, props) {
-  props = props && props.customProps ? props.customProps : props;
-  if (props.domElement) {
-    return () => props.domElement;
-  } else {
-    return defaultDomElementGetter(props);
-  }
-}
-
-function defaultDomElementGetter(props) {
-  const appName = props.appName || props.name;
-  if (!appName) {
-    throw Error(
-      `single-spa-dojo was not given an application name as a prop, so it can't make a unique dom element container for the dojo application`
-    );
-  }
-  const htmlId = `single-spa-application:${appName}`;
-
-  return function defaultDomEl() {
-    let domElement = document.getElementById(htmlId);
-    if (!domElement) {
-      domElement = document.createElement("div");
-      domElement.id = htmlId;
-      document.body.appendChild(domElement);
-    }
-
-    return domElement;
-  };
 }
